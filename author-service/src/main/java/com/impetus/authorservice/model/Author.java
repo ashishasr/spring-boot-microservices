@@ -1,51 +1,52 @@
 package com.impetus.authorservice.model;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
 @Table(name="author")
-public class Author {
+public class Author implements Serializable{
 	
-	/*@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)*/
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	
+	@Column(name = "name")
 	private String name;
 	
-	public Author(long id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
+	/*@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+	//@JsonManagedReference("author")
+	@JsonIgnore
+	private List<Book> bookList = new ArrayList<Book>();*/
 
-	/*@ElementCollection
-	private List<Book> bookList = new ArrayList<Book>();
-*/
 	public Author() {
 		super();
 	}
 
-	/*public Author(long id, String name, List<Book> bookList) {
+	public Author(String name) {
 		super();
-		this.id = id;
 		this.name = name;
-		this.bookList = bookList;
-	}*/
+	}
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
 		return id;
 	}
@@ -54,7 +55,6 @@ public class Author {
 		this.id = id;
 	}
 
-	@Column(name = "name")
 	public String getName() {
 		return name;
 	}
@@ -63,28 +63,19 @@ public class Author {
 		this.name = name;
 	}
 
-	@Override
-	public String toString() {
-		return "Author [id=" + id + ", name=" + name + "]";
-	}
-
 	/*public List<Book> getBookList() {
 		return bookList;
 	}
 
 	public void setBookList(List<Book> bookList) {
 		this.bookList = bookList;
-	}*/
+	}
+	*/
 	
-	
-	
-	
-	/*private List<Book> bookList = new ArrayList<>();
-	
-	public void addBook(Book book) {
+	/*public void addBook(Book book) {
 		bookList.add(book);
+		//book.setAuthor(this);
 	}*/
-	
 	
 	
 	

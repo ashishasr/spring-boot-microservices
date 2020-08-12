@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import com.impetus.authorservice.exception.ResourceNotFoundException;
 import com.impetus.authorservice.model.Author;
 import com.impetus.authorservice.model.Book;
-import com.impetus.authorservice.model.BookInfo;
+import com.impetus.authorservice.model.BookInfoForAuthor;
 import com.impetus.authorservice.services.AuthorRepository;
 
 @RestController
@@ -44,8 +44,8 @@ public class AuthorController {
 	}
 	
 	@PostMapping("/authors")
-	public Author createAuthor(@RequestBody Author author) {
-		return repository.save(author);
+	public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
+		return new ResponseEntity<>(repository.save(author), HttpStatus.OK);
 	}
 	
 	
@@ -57,10 +57,12 @@ public class AuthorController {
 	}
 	
 	@GetMapping("/authors/{id}/books")
-	public ResponseEntity<List<BookInfo>> getAuthorBooksById(@PathVariable(value = "id") Long authorId) throws ResourceNotFoundException{
+	public ResponseEntity<BookInfoForAuthor> getAuthorBooksById(@PathVariable(value = "id") Long authorId) throws ResourceNotFoundException{
 		Author author = repository.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("Author not found for this id ::" + authorId));
 		//List<Book> books= author.getBookList();
-		return null;
+        BookInfoForAuthor booksForAuthor = restTemplate.getForObject("http://localhost:8080/api/bookservice/author/" + authorId, BookInfoForAuthor.class);
+        System.out.println(booksForAuthor.getAuthorId());
+		return ResponseEntity.ok().body(booksForAuthor);
 	}
 	
 }
