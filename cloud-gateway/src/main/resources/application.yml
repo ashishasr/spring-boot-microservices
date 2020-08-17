@@ -1,0 +1,29 @@
+spring:
+   application:
+      name: GATEWAY-SERVICE
+   cloud:
+      gateway:
+          routes:
+           - id: author-catalog-service
+             uri: lb://AUTHOR-CATALOG-SERVICE
+             predicates:
+               - Path=/api/authorservice/**
+           - id: book-catalog-service
+             uri: lb://BOOK-CATALOG-SERVICE
+             predicates:
+               - Path=/api/bookservice/**
+           - id: genre-catalog-service
+             uri: lb://GENRE-CATALOG-SERVICE
+             predicates:
+               - Path=/api/genreservice/**
+eureka:
+   client:
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+         defaultZone: http://localhost:8761/eureka/
+   instance:
+      hostname: localhost
+
+server:
+   port: 8989
